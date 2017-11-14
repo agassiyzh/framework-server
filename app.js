@@ -7,11 +7,9 @@ const path = require('path');
 const logger = require('koa-logger');
 const sqlite3 = require('sqlite3');
 const mkdirp = require('mkdirp');
+const Enum = require('enum');
 
-const typEnum = {
-  "production": 0,
-  "development": 1
-};
+const typEnum = new Enum( ['PRODUCTION', 'DEVELOPMENT'] );
 
 
 let Router = require('koa-better-router')
@@ -71,14 +69,47 @@ router.post('/upload', function *(next) {
   const name = fields.name;
   const changelog = fields.changelog;
   const type = fields.type;
+  const featureName = fields.featureName;
 
-  if ( !(type in typEnum) ) {
+  // if ( !typEnum.isDefined(type.toUpperCase()) ) {
+  //   this.body = "type error";
+  //   yield next
+  //
+  //   return;
+  // }
+
+  let thisFrameworkDir = "";
+
+  if (type.toUpperCase() == 'PRODUCTION') {
+    if (version == undefined) {
+      this.body = "no version";
+
+      yield next;
+
+      return;
+    }
+
+    thisFrameworkDir = path.join(serverDir, "PRODUCTION", name, version);
+
+  }else if (type.toUpperCase() == 'DEVELOPMENT') {
+
+    if (featureName == undefined) {
+      this.body = "no featureName";
+
+      yield next;
+
+      return;
+    }
+
+    thisFrameworkDir = path.join(serverDir, "DEVELOPMENT", name, featureName);
+  }else {
     this.body = "type error";
     yield next
 
     return;
   }
 
+  console.log(typEnum.get(type.toUpperCase()).value);
 
   const files = this.request.body.files;
 
@@ -86,13 +117,12 @@ router.post('/upload', function *(next) {
 
   const reader = fs.createReadStream(framework.path);
 
-  const thisFrameworkDir = path.join(serverDir, name, version);
-
   console.log(thisFrameworkDir);
 
   createFolderIfNeeded(thisFrameworkDir);
 
   const stream = fs.createWriteStream(path.join(thisFrameworkDir, name + ".framework.zip"));
+
   reader.pipe(stream);
 
   this.body = 'done'
