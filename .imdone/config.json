@@ -1,25 +1,13 @@
 {
   "exclude": [
-    "^(node_modules|bower_components|\\.imdone|target|build|dist|logs)[\\/\\\\]?|\\.(git|svn|hg|npmignore)|\\~$|\\.(jpg|png|gif|swp|ttf|otf)$"
+    "^(node_modules|bower_components|\\.imdone|target|build|dist|logs|flow-typed)[\\/\\\\]?|\\.(git|svn|hg|npmignore)|\\~$|\\.(jpg|png|gif|swp|ttf|otf)$"
   ],
   "watcher": true,
-<<<<<<< HEAD
-  "keepEmptyPriority": false,
-  "code": {
-    "include_lists": [
-      "TODO",
-      "DOING",
-      "DONE",
-      "PLANNING",
-      "FIXME",
-      "ARCHIVE",
-=======
   "keepEmptyPriority": true,
   "code": {
     "include_lists": [
       "TODO",
       "FIXME",
->>>>>>> 6e572deb86365b98938013fabec79638d6d8af68
       "HACK",
       "CHANGED",
       "XXX",
@@ -28,16 +16,7 @@
       "REVIEW"
     ]
   },
-<<<<<<< HEAD
-  "lists": [
-    {
-      "name": "TODO",
-      "hidden": true
-    }
-  ],
-=======
   "lists": [],
->>>>>>> 6e572deb86365b98938013fabec79638d6d8af68
   "marked": {
     "gfm": true,
     "tables": true,
@@ -45,5 +24,10 @@
     "pedantic": false,
     "smartLists": true,
     "langPrefix": "language-"
+  },
+  "sync": {
+    "id": "5a0d7ba0a8ed7c37070faa24",
+    "name": "agassiyzh/framework-server",
+    "useImdoneioForPriority": true
   }
 }
