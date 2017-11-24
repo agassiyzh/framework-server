@@ -51,6 +51,26 @@ excuteDB("CREATE TABLE IF NOT EXISTS info (\
   changelog TEXT\
 )");
 
+function checkParameters(parameters) {
+
+  let message = [];
+
+  if (parameters.name == undefined) message = message + "name";
+
+  switch (parameters.type.toUpperCase()) {
+    case "DEVELOPMENT":
+
+      break;
+    case "PRODUCTION":
+
+      break;
+    default:
+
+  }
+
+  return YES;
+}
+
 app.use(koaBody({ multipart: true}));
 
 router.get('/', (ctx, next) => {
@@ -77,6 +97,8 @@ router.post('/upload', function *(next) {
   //
   //   return;
   // }
+
+  const parametersCheckResult = checkParameters(fields);
 
   let thisFrameworkDir = "";
 
@@ -129,6 +151,8 @@ router.post('/upload', function *(next) {
 
   yield next
 })
+
+
 
 app.use(router.middleware())
 
