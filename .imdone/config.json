@@ -3,6 +3,7 @@
     "^(node_modules|bower_components|\\.imdone|target|build|dist|logs)[\\/\\\\]?|\\.(git|svn|hg|npmignore)|\\~$|\\.(jpg|png|gif|swp|ttf|otf)$"
   ],
   "watcher": true,
+<<<<<<< HEAD
   "keepEmptyPriority": false,
   "code": {
     "include_lists": [
@@ -12,6 +13,13 @@
       "PLANNING",
       "FIXME",
       "ARCHIVE",
+=======
+  "keepEmptyPriority": true,
+  "code": {
+    "include_lists": [
+      "TODO",
+      "FIXME",
+>>>>>>> 6e572deb86365b98938013fabec79638d6d8af68
       "HACK",
       "CHANGED",
       "XXX",
@@ -20,12 +28,16 @@
       "REVIEW"
     ]
   },
+<<<<<<< HEAD
   "lists": [
     {
       "name": "TODO",
       "hidden": true
     }
   ],
+=======
+  "lists": [],
+>>>>>>> 6e572deb86365b98938013fabec79638d6d8af68
   "marked": {
     "gfm": true,
     "tables": true,
