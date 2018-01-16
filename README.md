@@ -1,14 +1,16 @@
 ## API参数
 
-| 参数名        | 是否可选            | 注释                         |
-|:--------------|:--------------------|:-----------------------------|
-| version       | PRODUCTION必须      | framework 版本号             |
-| featureName   | DEVELOPMENT环境必须 | 正在开发的分支名             |
-| frameworkName | 必须                | 组件名                       |
-| changelog     | PRODUCTION必须      | 在PRODUCTION环境必须要添加   |
-| environment   | 必须                | `DEVELOPMENT` / `PRODUCTION` |
-| framework     | 必须                | framework 文件zip路径        |
-| commitHash    | DEVELOPMENT环境必须 | DEVELOPMENT环境必须要添加    |
+
+| 参数名        | DEVELOPMENT必填 | PRODUCTION必填           | 注释                 |
+|:--------------|:----------------|:------------------------------------------------|
+| environment   | ✅               | ✅                | `DEVELOPMENT` / `PRODUCTION` |
+| frameworkName | ✅               | ✅                | 组件名                       |
+| framework     | ✅               | ✅                | framework 文件zip路径        |
+| version       | ❌               | ✅      | framework 版本号                       |
+| changelog     | ❌               | ✅      | 本次版本的改动说明                     |
+| featureName   | ✅               | ❌ | 正在开发的分支名                            |
+| commitHash    | ✅               | ❌ | git 的commit hash ID                        |
+
 
 ## Example
 
@@ -35,7 +37,7 @@ wget http://xxx.xxx:3000/getframework/PRODUCTION/:frameworkName/:version
 
 #### DEVELOPMENT环境
 ```
-wget http://xxx.xxx:3000/getframework/DEVELOPMENT/:frameworkName/:commitHash
+wget http://xxx.xxx:3000/getframework/DEVELOPMENT/:frameworkName/:featureName/:commitHash
 ```
 
 
@@ -47,8 +49,16 @@ frameworks/
 │   └── frameworkName
 │       └── featureName
 │           └── commitHash.framework.zip
-└── PRODUCTION
-    └── frameworkName
-        └── version
-            └── frameworkName.framework.zip
+├── PRODUCTION
+│   └── frameworkName
+│       └── version
+│           └── frameworkName.framework.zip
+└── db.sqlite3
 ```
+
+
+### TODO
+
+- [ ] 上传文件zip格式检查
+- [ ] 一个首页展示
+- [ ] 查询

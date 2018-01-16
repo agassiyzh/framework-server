@@ -1,0 +1,4 @@
+name: hello world!
+cmd: gulp serve-dev
+env:
+  PATH: /Users/zhuohui/.rvm/gems/ruby-2.3.0/bin:/Users/zhuohui/.rvm/gems/ruby-2.3.0@global/bin:/Users/zhuohui/.rvm/rubies/ruby-2.3.0/bin:/Users/zhuohui/.nvm/versions/node/v9.0.0/bin:/Users/zhuohui/.fzf/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/zhuohui/.rvm/bin
