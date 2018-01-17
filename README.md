@@ -1,15 +1,15 @@
 ## API参数
 
 
-| 参数名        | DEVELOPMENT必填 | PRODUCTION必填           | 注释                 |
-|:--------------|:----------------|:------------------------------------------------|
-| environment   | ✅               | ✅                | `DEVELOPMENT` / `PRODUCTION` |
-| frameworkName | ✅               | ✅                | 组件名                       |
-| framework     | ✅               | ✅                | framework 文件zip路径        |
-| version       | ❌               | ✅      | framework 版本号                       |
-| changelog     | ❌               | ✅      | 本次版本的改动说明                     |
-| featureName   | ✅               | ❌ | 正在开发的分支名                            |
-| commitHash    | ✅               | ❌ | git 的commit hash ID                        |
+| 参数名        | DEVELOPMENT必填 | PRODUCTION必填 | 注释                         |
+|:--------------|:---------------:|:--------------:|:-----------------------------|
+| environment   |        ✅        |       ✅        | `DEVELOPMENT` / `PRODUCTION` |
+| frameworkName |        ✅        |       ✅        | 组件名                       |
+| framework     |        ✅        |       ✅        | framework 文件zip路径        |
+| version       |        ❌        |       ✅        | framework 版本号             |
+| changelog     |        ❌        |       ✅        | 本次版本的改动说明           |
+| featureName   |        ✅        |       ❌        | 正在开发的分支名             |
+| commitHash    |        ✅        |       ❌        | git 的commit hash ID         |
 
 
 ## Example
