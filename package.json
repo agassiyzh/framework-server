@@ -5,6 +5,7 @@
   "main": "app.js",
   "dependencies": {
     "enum": "^2.5.0",
+    "is-zip-file": "^1.0.2",
     "koa": "^2.4.1",
     "koa-better-router": "^2.1.1",
     "koa-body": "^2.5.0",
@@ -22,7 +23,8 @@
   },
   "scripts": {
     "start": "node app.js",
-    "test": "mocha"
+    "test": "mocha",
+    "dev": "gulp serve-dev"
   },
   "repository": {
     "type": "git",

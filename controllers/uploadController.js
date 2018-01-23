@@ -1,51 +1,8 @@
 'use strict';
 
-
-
-
-/**
-router.post('/upload', function *(next) {
-  console.log(this.request.body.fields);
-
-  let fields = this.request.body.fields;
-
-  let result = checkParameters(fields)
-
-  console.log(result);
-  console.log(typeof result.result);
-
-  if ( result === true ) {
-
-  }else {
-    this.body = 'result'
-     yield next
-  }
-
-  // console.log(typEnum.get(type.toUpperCase()).value);
-  //
-  // const files = this.request.body.files;
-  //
-  // const framework = files.framework;
-  //
-  // const reader = fs.createReadStream(framework.path);
-  //
-  // console.log(thisFrameworkDir);
-  //
-  // createFolderIfNeeded(thisFrameworkDir);
-  //
-  // const stream = fs.createWriteStream(path.join(thisFrameworkDir, name + ".framework.zip"));
-  //
-  // reader.pipe(stream);
-
-  this.body = 'done'
-
-  yield next
-})
-
-*/
+const ZIP_FILE = require('is-zip-file');
 
 module.exports = class uploadController {
-
 
   createFolderIfNeeded(path) {
 
@@ -55,6 +12,7 @@ module.exports = class uploadController {
   }
 
   checkParameters(params) {
+
 
     let result = {
       isValid : true,
@@ -97,15 +55,56 @@ module.exports = class uploadController {
     return result;
   }
 
+  checkFiles(files) {
+
+    try {
+      const framework = files.framework;
+
+      let result = {
+        isValid: true,
+        message: ""
+      };
+
+      if (framework === undefined) {
+        result = {
+          isValid : false,
+          message : "framework file not set"
+        }
+
+        return result;
+      }
+
+      const isZip = ZIP_FILE.isZipSync(framework.path);
+
+      if (!isZip) {
+        result.isValid = false
+        result.message = "the uploaded framework file is not zip"
+      }
+    } catch (error) {
+      console.log(error); 
+    }
+  }
+
+  getFileAbsolutePathWithParameters(parameters) {
+
+  }
+
+  async saveFiles(file, path) {
+    
+  }
+
   async upload(ctx, next) {
-    ctx.body = 'call upload function';
 
-    let fields = ctx.request.body.fields;
+    const parametersCheckResult = this.checkParameters(ctx.request.body.fileds);
 
-    const result = this[checkParameters](fields);
+    const fileCheckResult = this.checkFiles(ctx.request.body.files);
 
-    ctx.body = result.message;
+    if (parametersCheckResult.isValid && fileCheckResult.isValid) {
 
+      ctx.body = "OK"
+    }else {
+      ctx.body = parametersCheckResult.message + '\n' + fileCheckResult.message;
+    }
 
     next()
   }
