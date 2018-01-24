@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+const serverRootDir = require('../utils/FileUtils').serverRootDir
 
 const ZIP_FILE = require('is-zip-file');
 
@@ -8,7 +9,7 @@ module.exports = class uploadController {
 
   createFolderIfNeeded(path) {
 
-    if(!fs.existsSync(path)) {
+    if (!fs.existsSync(path)) {
       mkdirp.sync(path);
     }
   }
@@ -17,8 +18,8 @@ module.exports = class uploadController {
 
 
     let result = {
-      isValid : true,
-      message : ""
+      isValid: true,
+      message: ""
     };
 
     const environment = params.environment;
@@ -28,9 +29,9 @@ module.exports = class uploadController {
 
     if (environment == 'DEVELOPMENT') {
       neededParams = neededParams.concat(["featureName", 'commitHash']);
-    }else if (environment == 'PRODUCTION') {
+    } else if (environment == 'PRODUCTION') {
       neededParams = neededParams.concat(["version", 'changelog']);
-    }else {
+    } else {
       result.isValid = false;
 
       result.message = 'environment should be DEVELOPMENT/PRODUCTION';
@@ -69,8 +70,8 @@ module.exports = class uploadController {
 
       if (framework === undefined) {
         result = {
-          isValid : false,
-          message : "framework file not set"
+          isValid: false,
+          message: "framework file not set"
         }
 
         return result;
@@ -83,7 +84,7 @@ module.exports = class uploadController {
         result.message = "the uploaded framework file is not zip"
       }
     } catch (error) {
-      console.log(error); 
+      console.log(error);
     }
   }
 
@@ -92,15 +93,15 @@ module.exports = class uploadController {
     let filePath = '';
 
     const environment = parameters.environment;
-    
+
 
     if (environment == 'DEVELOPMENT') {
       let fileName = parameters.commitHash + ".framework.zip"
-      filePath = path.join("DEVELOPMENT", parameters.frameworkName, parameters.featureName, fileName)
-    }else if (environment == "PRODUCTION") {
+      filePath = path.join(serverRootDir, "DEVELOPMENT", parameters.frameworkName, parameters.featureName, fileName)
+    } else if (environment == "PRODUCTION") {
       let fileName = parameters.frameworkName + ".framework.zip"
-      filePath = path.join("PRODUCTION", parameters.frameworkName, parameters.version, fileName);
-    }else {
+      filePath = path.join(serverRootDir, "PRODUCTION", parameters.frameworkName, parameters.version, fileName);
+    } else {
 
     }
 
@@ -109,13 +110,13 @@ module.exports = class uploadController {
   }
 
   async saveFiles(file, path) {
-    
+
   }
 
   async upload(ctx, next) {
 
     console.log(ctx.request.body);
-    
+
     const parametersCheckResult = this.checkParameters(ctx.request.body.fields);
 
     const fileCheckResult = this.checkFiles(ctx.request.body.files);
@@ -123,7 +124,7 @@ module.exports = class uploadController {
     if (parametersCheckResult.isValid && fileCheckResult.isValid) {
 
       ctx.body = "OK"
-    }else {
+    } else {
       ctx.body = parametersCheckResult.message + '\n' + fileCheckResult.message;
     }
 

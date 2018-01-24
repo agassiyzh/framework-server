@@ -7,6 +7,7 @@ const sqlite3 = require('sqlite3');
 const Enum = require('enum');
 const os = require('os')
 const path = require('path');
+const serverRootDir = require('./utils/FileUtils.js').serverRootDir;
 
 const createFolderIfNeeded = require('./utils/FileUtils.js').createFolderIfNeeded;
 
@@ -16,9 +17,7 @@ const typEnum = new Enum( ['PRODUCTION', 'DEVELOPMENT'] );
 let router = require('./router.js')
 
 
-let serverDir = os.homedir() + '/frameworks/'
-
-createFolderIfNeeded(serverDir);
+createFolderIfNeeded(serverRootDir);
 
 if (app.env == 'development') {
   console.log("run as development");
@@ -32,7 +31,7 @@ if (app.env == 'development') {
 }
 
 function excuteDB(cmd, params, callback) {
-  var db = new sqlite3.Database(serverDir + 'db.sqlite3');
+  var db = new sqlite3.Database(serverRootDir + '/db.sqlite3');
   db.run(cmd, params, callback);
 
   db.close();
