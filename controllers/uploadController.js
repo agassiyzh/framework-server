@@ -1,5 +1,7 @@
 'use strict';
 
+const path = require('path');
+
 const ZIP_FILE = require('is-zip-file');
 
 module.exports = class uploadController {
@@ -87,6 +89,23 @@ module.exports = class uploadController {
 
   getFileAbsolutePathWithParameters(parameters) {
 
+    let filePath = '';
+
+    const environment = parameters.environment;
+    
+
+    if (environment == 'DEVELOPMENT') {
+      let fileName = parameters.commitHash + ".framework.zip"
+      filePath = path.join("DEVELOPMENT", parameters.frameworkName, parameters.featureName, fileName)
+    }else if (environment == "PRODUCTION") {
+      let fileName = parameters.frameworkName + ".framework.zip"
+      filePath = path.join("PRODUCTION", parameters.frameworkName, parameters.version, fileName);
+    }else {
+
+    }
+
+    return filePath;
+
   }
 
   async saveFiles(file, path) {
@@ -95,7 +114,9 @@ module.exports = class uploadController {
 
   async upload(ctx, next) {
 
-    const parametersCheckResult = this.checkParameters(ctx.request.body.fileds);
+    console.log(ctx.request.body);
+    
+    const parametersCheckResult = this.checkParameters(ctx.request.body.fields);
 
     const fileCheckResult = this.checkFiles(ctx.request.body.files);
 

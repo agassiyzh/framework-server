@@ -32,5 +32,17 @@ describe('UploadController', () => {
       result.isValid.should.equal(true);
     })
 
+    it ('check file path', () => {
+      const path = uploadController.getFileAbsolutePathWithParameters({
+        environment : "DEVELOPMENT",
+        frameworkName : "frameworkName",
+        commitHash : "kajdlfj2olkj",
+        featureName : "featureName"
+      });
+
+      console.log("path:" + path);
+      
+    })
+
   })
 })
