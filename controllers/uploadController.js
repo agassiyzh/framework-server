@@ -1,7 +1,8 @@
 'use strict';
 
 const path = require('path');
-const serverRootDir = require('../utils/FileUtils').serverRootDir
+const serverRootDir = require('../utils/FileUtils').serverRootDir;
+const DatabaseUtil = require("../utils/DatabaseUtil");
 
 const ZIP_FILE = require('is-zip-file');
 
@@ -122,7 +123,6 @@ module.exports = class uploadController {
     const fileCheckResult = this.checkFiles(ctx.request.body.files);
 
     if (parametersCheckResult.isValid && fileCheckResult.isValid) {
-
       ctx.body = "OK"
     } else {
       ctx.body = parametersCheckResult.message + '\n' + fileCheckResult.message;
