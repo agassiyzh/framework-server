@@ -5,7 +5,8 @@ const DatabaseUtil = require('../utils/DatabaseUtil');
 
 describe('Database util test', () => {
 
-    it ('create table index test', (done)=> {
+    it('create table index test', (done) => {
+
         DatabaseUtil.createDatabase((error) => {
             should.not.exist(error);
             done();
@@ -13,31 +14,41 @@ describe('Database util test', () => {
     });
 
     it('instert row test', (done) => {
+
+        const timestamp = Date.now();
+
         DatabaseUtil.insertDB({
             environment: "DEVELOPMENT",
             frameworkName: "frameworkName",
             commitHash: "1",
             featureName: "featureName",
-            version: "1.2"
-        }, (err) =>{
-            should.not.exist(err)
-            
+            version: timestamp
+        }, (err) => {
+            console.log('did insert');
+
+            should.not.exist(err);
+
+            console.log(err);
             done();
         });
-    })
+    })    
+})
 
+
+describe('query db', () => {
+    
     it('query row test', (done) => {
+
         DatabaseUtil.queryDB({
             environment: "DEVELOPMENT",
             frameworkName: "frameworkName",
-            commitHash: "kajdlfj2olkjhjhdjfsj",
+            commitHash: "2",
             featureName: "featureName",
-            version: "1.0"
-        }, (err, row) =>{
-            should.not.exist(err)
+            version: "1.2"
+        }, (err, row) => {
+            should.not.exist(err);
+            // row.should.have.property('environment')
 
-            row.should.have.property('environment')
-            
             done();
         });
     })

@@ -6,26 +6,16 @@ const serverRootDir = require('./FileUtils.js').serverRootDir;
 
 
 function getDB() {
-    const db = new sqlite3.cached.Database(serverRootDir + '/db.sqlite3');
+    const db = new sqlite3.Database(serverRootDir + '/db.sqlite3');
 
     return db;
 }
 
-module.exports.createDatabase = async (callback = (err)=>{}) => {
+module.exports.createDatabase = async (callback = (err) => {}) => {
     const db = getDB();
 
-    const createDatabaseSQL = `CREATE TABLE IF NOT EXISTS Framework ( 
-        id integer PRIMARY KEY autoincrement,
-        version TEXT,
-        frameworkName TEXT,
-        featureName TEXT,
-        changelog TEXT,
-        environment TEXT,
-        commitHash TEXT 
-      );
-        CREATE UNIQUE INDEX IF NOT EXISTS framework_PRODUCTION_I ON Framework (version, environment, frameworkName);
-        CREATE UNIQUE INDEX IF NOT EXISTS framework_DEVELOPMENT_I ON Framework (commitHash, environment, frameworkName);
-      `
+    console.log(db);
+    
 
     try {
         db.serialize(() => {
@@ -39,14 +29,12 @@ module.exports.createDatabase = async (callback = (err)=>{}) => {
                 commitHash TEXT 
               );`);
 
-              db.run("CREATE UNIQUE INDEX IF NOT EXISTS framework_PRODUCTION_I ON Framework (version, environment, frameworkName);");
-
-              db.run("CREATE UNIQUE INDEX IF NOT EXISTS framework_DEVELOPMENT_I ON Framework (commitHash, environment, frameworkName);");
+            db.run("CREATE UNIQUE INDEX IF NOT EXISTS framework_I ON Framework (commitHash, version, environment, frameworkName);");
         });
 
-        
+
     } catch (error) {
-        
+
         console.log(error);
 
     } finally {
@@ -55,9 +43,9 @@ module.exports.createDatabase = async (callback = (err)=>{}) => {
 
 }
 
-module.exports.queryDB = async (params, callback) => {
+module.exports.queryDB = async (params, callback = (err, row) => {}) => {
     const db = getDB();
-
+    
 
     if (params.environment == 'DEVELOPMENT') {
 
@@ -98,25 +86,39 @@ module.exports.queryDB = async (params, callback) => {
         throw (Error("envrionment should be DEVELOPMENT or PRODUCTION"));
     }
 
-    db.close();
+    db.close(() => {
+        console.log('cloase db after query');
+        
+    });
 
 }
 
-module.exports.insertDB = (params, callback) => {
+module.exports.insertDB = (params, callback = (error) => {}) => {
+
 
     const db = getDB();
 
-    db.run(
-        "INSERT INTO Framework (environment, version, frameworkName, featureName, changelog, commitHash) VALUES (?, ?, ?, ?, ?, ?)",
-        params.environment,
-        params.version,
-        params.frameworkName,
-        params.featureName,
-        params.changelog,
-        params.commitHash,
-        (error) => {
-            callback(error);
-        }
-    );
-    db.close();
+    try {
+        db.run(
+            "INSERT INTO Framework (environment, version, frameworkName, featureName, changelog, commitHash) VALUES (?, ?, ?, ?, ?, ?)", [params.environment,
+                params.version,
+                params.frameworkName,
+                params.featureName,
+                params.changelog,
+                params.commitHash
+            ],
+            (error) => {
+                callback(error);
+            }
+        );
+    } catch (error) {
+        console.log(error);
+
+    }
+
+    db.close(() => {
+        console.log('closed db after insert');
+
+    });
+
 }
