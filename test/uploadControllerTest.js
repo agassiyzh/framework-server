@@ -39,8 +39,6 @@ describe('UploadController', () => {
         commitHash : "kajdlfj2olkj",
         featureName : "featureName"
       });
-
-      console.log("path:" + path);
       
     })
 

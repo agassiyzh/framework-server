@@ -11,10 +11,8 @@ function getDB() {
     return db;
 }
 
-module.exports.createDatabase = async (callback = (err) => {}) => {
+module.exports.createDatabase = (callback = (err) => {}) => {
     const db = getDB();
-
-    console.log(db);
     
 
     try {
@@ -43,62 +41,70 @@ module.exports.createDatabase = async (callback = (err) => {}) => {
 
 }
 
-module.exports.queryDB = async (params, callback = (err, row) => {}) => {
-    const db = getDB();
+module.exports.queryDB = (params) => {
+
+    return new Promise( (resolve, reject) => {
+        const db = getDB();
+
+        if (params.environment == 'DEVELOPMENT') {
+
+            const SQL = `SELECT * FROM Framework WHERE
+                environment=? AND
+                frameworkName=? AND
+                commitHash=?;
+            `;
     
-
-    if (params.environment == 'DEVELOPMENT') {
-
-        const SQL = `SELECT * FROM Framework WHERE
-            environment=? AND
-            frameworkName=? AND
-            commitHash=?;
-        `;
-
-
-        db.get(SQL,
-            params.environment,
-            params.frameworkName,
-            params.commitHash,
-            (err, row) => {
-
-                callback(err, row);
-            }
-        )
-
-    } else if (params.environment == 'PRODUCTION') {
-        const SQL = `SELECT * FROM Framework WHERE
-            environment=? AND
-            frameworkName=? AND
-            version=?;
-        `;
-
-        db.get(SQL,
-            params.environment,
-            params.frameworkName,
-            params.version,
-            (err, row) => {
-                callback(err, row);
-            }
-        );
-
-    } else {
-        throw (Error("envrionment should be DEVELOPMENT or PRODUCTION"));
-    }
-
-    db.close(() => {
-        console.log('cloase db after query');
-        
+            db.get(SQL,
+                params.environment,
+                params.frameworkName,
+                params.commitHash,
+                (err, row) => {
+                    
+                    if (err) {
+                        reject(err);
+                    }else {
+                        resolve(row);
+                    }
+                }
+            )
+    
+        } else if (params.environment == 'PRODUCTION') {
+            const SQL = `SELECT * FROM Framework WHERE
+                environment=? AND
+                frameworkName=? AND
+                version=?;
+            `;
+    
+            db.get(SQL,
+                params.environment,
+                params.frameworkName,
+                params.version,
+                (err, row) => {
+                    if (err) {
+                        reject(err);
+                    }else {
+                        resolve(row);
+                    }
+                }
+            );
+    
+        } else {
+            throw (Error("envrionment should be DEVELOPMENT or PRODUCTION"));
+        }
+    
+        db.close(() => {
+            console.log('cloase db after query');
+            
+        });
     });
 
 }
 
-module.exports.insertDB = (params, callback = (error) => {}) => {
+module.exports.insertDB = (params) => {
 
+    return new Promise((resolve, reject) =>  {
+        const db = getDB();
 
-    const db = getDB();
-
-    try {
         db.run(
             "INSERT INTO Framework (environment, version, frameworkName, featureName, changelog, commitHash) VALUES (?, ?, ?, ?, ?, ?)", [params.environment,
                 params.version,
@@ -108,17 +114,19 @@ module.exports.insertDB = (params, callback = (error) => {}) => {
                 params.commitHash
             ],
             (error) => {
-                callback(error);
+                if (error) {
+                    reject(error);
+                }else {
+                    resolve(true);
+                }
+                
             }
         );
-    } catch (error) {
-        console.log(error);
 
-    }
-
-    db.close(() => {
-        console.log('closed db after insert');
-
-    });
+        db.close(() => {
+            console.log('closed db after insert');
+    
+        });
+    })
 
 }

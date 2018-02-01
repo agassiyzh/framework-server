@@ -61,13 +61,16 @@ module.exports = class uploadController {
 
   checkFiles(files) {
 
+    let result = {
+      isValid: true,
+      message: ""
+    };
+
     try {
       const framework = files.framework;
 
-      let result = {
-        isValid: true,
-        message: ""
-      };
+
+
 
       if (framework === undefined) {
         result = {
@@ -75,7 +78,7 @@ module.exports = class uploadController {
           message: "framework file not set"
         }
 
-        return result;
+
       }
 
       const isZip = ZIP_FILE.isZipSync(framework.path);
@@ -83,10 +86,13 @@ module.exports = class uploadController {
       if (!isZip) {
         result.isValid = false
         result.message = "the uploaded framework file is not zip"
+
       }
     } catch (error) {
       console.log(error);
     }
+
+    return result;
   }
 
   getFileAbsolutePathWithParameters(parameters) {
@@ -116,14 +122,33 @@ module.exports = class uploadController {
 
   async upload(ctx, next) {
 
-    console.log(ctx.request.body);
-
     const parametersCheckResult = this.checkParameters(ctx.request.body.fields);
 
     const fileCheckResult = this.checkFiles(ctx.request.body.files);
 
     if (parametersCheckResult.isValid && fileCheckResult.isValid) {
       ctx.body = "OK"
+
+      const row = await DatabaseUtil.queryDB(ctx.request.body.fields)
+        .catch((error) => {
+          console.log(error);
+        });;
+
+
+      if (row) {
+        ctx.body = "this framework has uploaded";
+
+        next();
+
+        return;
+      }
+
+      const result = await DatabaseUtil.insertDB(ctx.request.body.fields)
+        .catch((error) => {
+          console.log(error);
+        });
+        
+
     } else {
       ctx.body = parametersCheckResult.message + '\n' + fileCheckResult.message;
     }

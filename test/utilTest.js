@@ -13,43 +13,39 @@ describe('Database util test', () => {
         });
     });
 
-    it('instert row test', (done) => {
+    it('instert row test', async () => {
 
         const timestamp = Date.now();
 
-        DatabaseUtil.insertDB({
+        const result = await DatabaseUtil.insertDB({
             environment: "DEVELOPMENT",
             frameworkName: "frameworkName",
             commitHash: "1",
             featureName: "featureName",
             version: timestamp
-        }, (err) => {
-            console.log('did insert');
-
-            should.not.exist(err);
-
-            console.log(err);
-            done();
+        }).catch((error) => {
+            
         });
+
+        result.should.equal(true)
     })    
 })
 
 
 describe('query db', () => {
     
-    it('query row test', (done) => {
+    it('query row test', async () => {
 
-        DatabaseUtil.queryDB({
+        const result = await DatabaseUtil.queryDB({
             environment: "DEVELOPMENT",
             frameworkName: "frameworkName",
-            commitHash: "2",
+            commitHash: "1",
             featureName: "featureName",
             version: "1.2"
-        }, (err, row) => {
-            should.not.exist(err);
-            // row.should.have.property('environment')
+        }).catch(error => {
+            console.log(error)
+            should.not.exist(error)
+        })
 
-            done();
-        });
     })
 })
