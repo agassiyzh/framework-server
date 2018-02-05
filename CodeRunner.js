@@ -1,9 +1,5 @@
-async function testSync() {
-    const hello = await "hello"
-    return "OK"
-}
+const path = require('path')
 
-testSync().then((result) => {
-    console.log(result);
-    
-})
+const testPath = path.join('1', 'b')
+
+console.log(testPath);

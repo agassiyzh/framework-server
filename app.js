@@ -36,3 +36,13 @@ app.use(koaBody({ multipart: true}));
 app.use(router.middleware())
 
 app.listen(3000);
+
+app.on('error', (err, ctx) => {
+  console.error('server error', err, ctx)
+});
+
+
+process.on('unhandledRejection', error => {
+  console.error('unhandledRejection', error);
+  process.exit(1) // To exit with a 'failure' code
+});

@@ -1,19 +1,14 @@
 'use strict';
 
 const path = require('path');
-const serverRootDir = require('../utils/FileUtils').serverRootDir;
 const DatabaseUtil = require("../utils/DatabaseUtil");
+const fs = require('fs');
+const getFileAbsolutePathWithParameters = require('../utils/FileUtils').getFileAbsolutePathWithParameters;
+const createFolderIfNeeded = require('../utils/FileUtils').createFolderIfNeeded;
 
 const ZIP_FILE = require('is-zip-file');
 
-module.exports = class uploadController {
-
-  createFolderIfNeeded(path) {
-
-    if (!fs.existsSync(path)) {
-      mkdirp.sync(path);
-    }
-  }
+module.exports = class UploadController {
 
   checkParameters(params) {
 
@@ -95,29 +90,15 @@ module.exports = class uploadController {
     return result;
   }
 
-  getFileAbsolutePathWithParameters(parameters) {
+  saveFiles(file, filePath) {
 
-    let filePath = '';
+    const dirName = path.dirname(filePath);
 
-    const environment = parameters.environment;
+    createFolderIfNeeded(dirName);
 
-
-    if (environment == 'DEVELOPMENT') {
-      let fileName = parameters.commitHash + ".framework.zip"
-      filePath = path.join(serverRootDir, "DEVELOPMENT", parameters.frameworkName, parameters.featureName, fileName)
-    } else if (environment == "PRODUCTION") {
-      let fileName = parameters.frameworkName + ".framework.zip"
-      filePath = path.join(serverRootDir, "PRODUCTION", parameters.frameworkName, parameters.version, fileName);
-    } else {
-
-    }
-
-    return filePath;
-
-  }
-
-  async saveFiles(file, path) {
-
+    const reader = fs.createReadStream(file.path);
+    const writeStream = fs.createWriteStream(filePath);
+    reader.pipe(writeStream);
   }
 
   async upload(ctx, next) {
@@ -147,7 +128,13 @@ module.exports = class uploadController {
         .catch((error) => {
           console.log(error);
         });
-        
+
+      if (result) {
+        const path = getFileAbsolutePathWithParameters(ctx.request.body.fields);
+
+        this.saveFiles(ctx.request.body.files.framework, path);
+      }
+
 
     } else {
       ctx.body = parametersCheckResult.message + '\n' + fileCheckResult.message;

@@ -32,12 +32,12 @@ curl http://xxxx.xxx:3000/upload \
 
 #### PRODUCTION环境
 ```bash
-wget http://xxx.xxx:3000/getframework/PRODUCTION/:frameworkName/:version
+curl http://xxx.xxx:3000/getframework/PRODUCTION/:frameworkName/:version -O -J
 ```
 
 #### DEVELOPMENT环境
 ```
-wget http://xxx.xxx:3000/getframework/DEVELOPMENT/:frameworkName/:featureName/:commitHash
+curl http://xxx.xxx:3000/getframework/DEVELOPMENT/:frameworkName/:featureName/:commitHash -O -J
 ```
 
 

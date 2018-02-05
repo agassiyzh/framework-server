@@ -24,7 +24,7 @@ describe('Database util test', () => {
             featureName: "featureName",
             version: timestamp
         }).catch((error) => {
-            
+            console.error(error);
         });
 
         result.should.equal(true)
