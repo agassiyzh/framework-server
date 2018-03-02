@@ -11,8 +11,6 @@ const createFolderIfNeeded = require('./utils/FileUtils.js').createFolderIfNeede
 const DatabaseUtils = require('./utils/DatabaseUtil');
 const typEnum = new Enum( ['PRODUCTION', 'DEVELOPMENT'] );
 
-
-
 let router = require('./router.js')
 
 createFolderIfNeeded(serverRootDir);
@@ -44,5 +42,5 @@ app.on('error', (err, ctx) => {
 
 process.on('unhandledRejection', error => {
   console.error('unhandledRejection', error);
-  process.exit(1) // To exit with a 'failure' code
+//  process.exit(1) // To exit with a 'failure' code
 });
