@@ -4,7 +4,7 @@ var gulp = require('gulp');
 
 gulp.task('serve-dev', function() {
   var options = {
-    script: './app.js',
+    script: './server/app.js',
     execMap: {
       "js": "node --harmony"
     },

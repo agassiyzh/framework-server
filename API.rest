@@ -1,9 +1,0 @@
-POST http://localhost:3000/upload
-Content-Type: multipart/form-data; boundary=--------------------
-----0df8f487c7cb03f7
-
---------------------------0df8f487c7cb03f7
-Content-Disposition: form-data; name="environment"
-
-DEVELOPMENT
---------------------------0df8f487c7cb03f7--
