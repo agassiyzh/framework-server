@@ -14,7 +14,9 @@ module.exports.createFolderIfNeeded = function createFolderIfNeeded(path) {
   }
 }
 
-const serverRootDir = path.join(os.homedir(), 'framework-server')
+
+
+const serverRootDir = (process.env.NODE_ENV == 'production')? path.join("/data", 'framework-server') : path.join(os.homedir(), 'framework-server')
 
 module.exports.getFileAbsolutePathWithParameters = function getFileAbsolutePathWithParameters(parameters) {
   let filePath = ''
