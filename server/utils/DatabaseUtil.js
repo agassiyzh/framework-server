@@ -11,6 +11,19 @@ function getDB() {
     return db;
 }
 
+
+
+function buildWhereFromParams(params) {
+    var wherePairs = [];
+    for (const key in params) {
+        wherePairs.push(key + '=' + "'" +params[key] + "'");
+    }
+
+    return wherePairs.join(" AND ");
+}
+
+module.exports.buildWhereFromParams = buildWhereFromParams;
+
 module.exports.createDatabase = (callback = (err) => {}) => {
     const db = getDB();
     
@@ -96,6 +109,30 @@ module.exports.queryDB = (params) => {
             console.log('cloase db after query');
             
         });
+    });
+
+}
+
+module.exports.deleteFramework = (params) => {
+    
+    return new Promise((resolve, reject) => {
+        const db = getDB();
+
+        const whereStatement = buildWhereFromParams(params);
+
+        const SQL = "DELETE FROM Framework WHERE " + whereStatement;
+        
+        console.log(SQL)
+
+        db.exec(SQL, (err) => {
+            if (err) {
+                reject(err);
+            }else {
+                resolve(true);
+            }
+        });
+
+        db.close();
     });
 
 }

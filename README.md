@@ -36,8 +36,20 @@ curl http://xxx.xxx:3000/getframework/PRODUCTION/:frameworkName/:version -O -J
 ```
 
 #### DEVELOPMENT环境
-```
+```bash
 curl http://xxx.xxx:3000/getframework/DEVELOPMENT/:frameworkName/:featureName/:commitHash -O -J
+```
+
+### DELETE
+
+```bash
+# PRODUCTION环境
+curl -X 'DELETE' http://xxx.xxx:3000/deleteframework/PRODUCTION/:frameworkName/:version -O -J
+```
+
+```bash
+# DEVELOPMENT环境
+curl -X 'DELETE' http://xxx.xxx:3000/deleteframework/DEVELOPMENT/:frameworkName/:featureName/:commitHash -O -J
 ```
 
 
@@ -59,6 +71,7 @@ frameworks/
 
 ### TODO
 
-- [ ] 上传文件zip格式检查
+- [x] 上传文件zip格式检查
 - [ ] 一个首页展示
 - [ ] 查询
+- [ ] 删除接口
