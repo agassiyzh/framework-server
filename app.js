@@ -10,6 +10,7 @@ const serverRootDir = require('./utils/FileUtils.js').serverRootDir;
 const createFolderIfNeeded = require('./utils/FileUtils.js').createFolderIfNeeded;
 const DatabaseUtils = require('./utils/DatabaseUtil');
 const typEnum = new Enum( ['PRODUCTION', 'DEVELOPMENT'] );
+const koajson = require('koa-json');
 
 let router = require('./router.js')
 
@@ -29,6 +30,8 @@ if (app.env == 'development') {
 DatabaseUtils.createDatabase();
 
 app.use(koaBody({ multipart: true}));
+
+app.use(koajson({ pretty: false, param: 'pretty' }))
 
 
 app.use(router.middleware())
