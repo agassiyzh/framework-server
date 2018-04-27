@@ -44,12 +44,12 @@ curl http://xxx.xxx:3000/getframework/DEVELOPMENT/:frameworkName/:featureName/:c
 
 ```bash
 # PRODUCTION环境
-curl -X 'DELETE' http://xxx.xxx:3000/deleteframework/PRODUCTION/:frameworkName/:version -O -J
+curl -X 'DELETE' http://xxx.xxx:3000/framework/PRODUCTION/:frameworkName/:version -O -J
 ```
 
 ```bash
 # DEVELOPMENT环境
-curl -X 'DELETE' http://xxx.xxx:3000/deleteframework/DEVELOPMENT/:frameworkName/:featureName/:commitHash -O -J
+curl -X 'DELETE' http://xxx.xxx:3000/framework/DEVELOPMENT/:frameworkName/:featureName/:commitHash -O -J
 ```
 
 
