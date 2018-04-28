@@ -3,6 +3,7 @@
 const UploadController = require('./controllers/UploadController');
 const GetFrameworkController = require('./controllers/GetFrameworkController');
 const DeleteFrameworkController = require('./controllers/DeleteFrameworkController');
+const ShowFrameworkController = require('./controllers/ShowFrameworkController');
 const Router = require('koa-better-router')
 const router = Router().loadMethods()
 
@@ -37,5 +38,7 @@ router.delete('/framework/DEVELOPMENT/:frameworkName/:featureName/:commitHash', 
 
   await deleteFrameworkController.deleteFramework(ctx, next, 'DEVELOPMENT')
 })
+
+router.get('/framework/:frameworkName', ShowFrameworkController.show)
 
 module.exports = router;

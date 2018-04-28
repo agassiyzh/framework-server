@@ -82,25 +82,36 @@ module.exports.queryDB = (params) => {
             )
     
         } else if (params.environment == 'PRODUCTION') {
-            const SQL = `SELECT * FROM Framework WHERE
+            let SQL = `SELECT * FROM Framework WHERE
                 environment=? AND
-                frameworkName=? AND
-                version=?;
+                frameworkName=?
             `;
     
-            db.get(SQL,
+            let values = [
                 params.environment,
-                params.frameworkName,
-                params.version,
-                (err, row) => {
+                params.frameworkName
+            ]
+
+            if (params.version) {
+                SQL += " AND version=? "
+                values.push(params.version)
+                // 这里可以用 all 取第一个
+                db.get(SQL, ...values, (err, row) => {
                     if (err) {
                         reject(err);
                     }else {
                         resolve(row);
                     }
-                }
-            );
-    
+                });
+            } else {
+                db.all(SQL, ...values, (err, row) => {
+                    if (err) {
+                        reject(err);
+                    }else {
+                        resolve(row);
+                    }
+                });
+            }
         } else {
             throw (Error("envrionment should be DEVELOPMENT or PRODUCTION"));
         }
