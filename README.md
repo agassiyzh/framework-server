@@ -39,16 +39,15 @@ curl -X 'DELETE' http://xxx.xxx:3000/framework/:frameworkName/:version -O -J
 ### 目录结构
 
 ```
-frameworks/
-├── DEVELOPMENT
-│   └── frameworkName
-│       └── featureName
-│           └── commitHash.framework.zip
-├── PRODUCTION
-│   └── frameworkName
-│       └── version
-│           └── frameworkName.framework.zip
-└── db.sqlite3
+Frameworks
+├── FramewrokA
+│   └── 0.0.10
+│       └── FramewrokB.framework.zip
+└── FramewrokB
+    ├── 0.0.1
+    │   └── FramewrokB.framework.zip
+    └── 0.0.2
+        └── FramewrokB.framework.zip
 ```
 
 
