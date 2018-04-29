@@ -21,11 +21,13 @@ router.get('/download/:frameworkName/:version', async (ctx, next) => {
 
 router.delete('/framework/:frameworkName/:version', async (ctx, next) => {
     let deleteFrameworkController = new DeleteFrameworkController();
-
+    
     await deleteFrameworkController.deleteFramework(ctx, next);
 })
 
-
 router.get('/framework/:frameworkName', ShowFrameworkController.show)
+
+router.get('/frameworks', ShowFrameworkController.showAllFrameworks)
+
 
 module.exports = router;

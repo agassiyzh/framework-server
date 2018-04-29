@@ -24,15 +24,27 @@ function buildWhereFromParams(params) {
 
 module.exports.buildWhereFromParams = buildWhereFromParams;
 
-module.exports.queryDB =  (params) => {
+module.exports.queryDB =  (conditions, selectColumn = [], distinct = false) => {
 
     return new Promise((resolve, reject) => {
-        const db = getDB();
+        let db = getDB();
 
+        let selectColumnSmt = "*"
 
-        let whereStatement = buildWhereFromParams(params);
+        if (selectColumn instanceof String) {
+            selectColumnSmt = selectColumn
+        }else if (selectColumn instanceof Array && selectColumn.length > 0) {
+            selectColumnSmt = selectColumn.join(',')
+        }
 
-        let SQL = "SELECT * FROM Framework WHERE " + whereStatement;
+        var SQL = `SELECT ${distinct? '' : 'DISTINCT'} ${selectColumnSmt} FROM Framework`
+
+        if (conditions instanceof Object && Object.keys(conditions).length > 0) {
+            let whereStatement = buildWhereFromParams(conditions);
+            SQL = "SELECT * FROM Framework WHERE " + whereStatement
+        }else if (conditions instanceof String && conditions.length > 0) {
+            SQL = "SELECT * FROM Framework WHERE " + conditions
+        }
 
         db.all(SQL, (error, rows) => {
             if (error) {

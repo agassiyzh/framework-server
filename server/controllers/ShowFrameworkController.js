@@ -26,5 +26,40 @@ module.exports = {
                 })
             }
         }
+    },
+
+    async showAllFrameworks(ctx, next) {
+
+        console.log(ctx.query)
+
+        if (ctx.query.allinfo == 'true') {
+            let result = await DatabaseUtils.queryDB({}, ['version', 'frameworkName', 'changelog'], false);
+
+            var frameworkMap = {}
+
+            result.forEach(item => {
+                let frameworkName = item.frameworkName
+
+                let newItem = `[${item.version}]  - ${item.changelog}`
+
+                if (frameworkMap[frameworkName] == undefined) {
+                    frameworkMap[frameworkName] = [ newItem ]
+                }else {
+                    frameworkMap[frameworkName].push(newItem)
+                }
+            });
+
+            ctx.body = frameworkMap
+        }else  {
+            let result = await DatabaseUtils.queryDB(undefined, ['frameworkName'], true);
+    
+            ctx.body = result.map((f) => {
+                return f.frameworkName
+            })
+
+        }
+
+
+        next();
     }
 }

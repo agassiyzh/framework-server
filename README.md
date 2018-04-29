@@ -22,6 +22,15 @@ curl http://xxxx.xxx:3000/upload \
   -F "framework=@/framework/zip/path" \
 ```
 
+### 查看所有Framework
+
+```bash
+curl -X 'DELETE' http://xxx.xxx:8080/frameworks
+
+#加上参数allinfo=true可以查看所有framework的所有版本
+curl -X 'DELETE' http://xxx.xxx:8080/frameworks\?allinfo=true
+```
+
 ### download
 
 ```bash
@@ -47,8 +56,8 @@ curl http://xxx.xxx:8080/framework/:frameworkName
 所有接口后面都可以加上`json`输出format后的json,`yaml`为yaml格式输出。但是不能同时使用。
 
 ```bash
-curl http://xxx.xxx:8080/framework/:frameworkName?json
-curl http://xxx.xxx:8080/framework/:frameworkName?yaml
+curl http://xxx.xxx:8080/framework/:frameworkName\?json
+curl http://xxx.xxx:8080/framework/:frameworkName\?yaml
 ```
 
 
