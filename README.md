@@ -40,6 +40,17 @@ curl -X 'DELETE' http://xxx.xxx:8080/framework/:frameworkName/:version
 curl http://xxx.xxx:8080/framework/:frameworkName
 ```
 
+---
+
+### PS
+
+所有接口后面都可以加上`json`输出format后的json,`yaml`为yaml格式输出。但是不能同时使用。
+
+```bash
+curl http://xxx.xxx:8080/framework/:frameworkName?json
+curl http://xxx.xxx:8080/framework/:frameworkName?yaml
+```
+
 
 ### 目录结构
 
