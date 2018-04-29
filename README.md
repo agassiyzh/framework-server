@@ -24,15 +24,20 @@ curl http://xxxx.xxx:3000/upload \
 
 ### download
 
-#### PRODUCTION环境
 ```bash
-curl http://xxx.xxx:3000/download/:frameworkName/:version -O -J
+curl http://xxx.xxx:8080/download/:frameworkName/:version -O -J
 ```
 
 ### DELETE
 
 ```bash
-curl -X 'DELETE' http://xxx.xxx:3000/framework/:frameworkName/:version -O -J
+curl -X 'DELETE' http://xxx.xxx:8080/framework/:frameworkName/:version
+```
+
+### 获取一个Framework的所有版本
+
+```bash
+curl http://xxx.xxx:8080/framework/:frameworkName
 ```
 
 
