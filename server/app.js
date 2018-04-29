@@ -9,6 +9,7 @@ const serverRootDir = require('./utils/FileUtils.js').serverRootDir;
 const createFolderIfNeeded = require('./utils/FileUtils.js').createFolderIfNeeded;
 const DatabaseUtils = require('./utils/DatabaseUtil');
 const koajson = require('koa-json');
+const koaYaml = require('../middleware/koa-yaml')
 
 let router = require('./router.js')
 
@@ -27,8 +28,9 @@ if (app.env == 'development') {
 
 app.use(koaBody({ multipart: true}));
 
-app.use(koajson({ pretty: false, param: 'pretty' }))
+app.use(koajson({ pretty: false, param: 'json' }))
 
+app.use(koaYaml({ param: 'yaml' }))
 
 app.use(router.middleware())
 

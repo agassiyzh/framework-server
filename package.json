@@ -9,12 +9,14 @@
     "koa": "^2.4.1",
     "koa-better-router": "^2.1.1",
     "koa-body": "^2.5.0",
+    "koa-is-json": "^1.0.0",
     "koa-json": "^2.0.2",
     "koa-logger": "^3.1.0",
     "koa-static": "^4.0.2",
     "koa-views": "^6.1.4",
     "mkdirp": "^0.5.1",
-    "sqlite3": "^3.1.13"
+    "sqlite3": "^3.1.13",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",
@@ -26,7 +28,7 @@
   },
   "scripts": {
     "start": "node server/app.js",
-    "test": "NODE_ENV=test;mocha",
+    "test": "NODE_ENV=test mocha",
     "dev": "gulp serve-dev"
   },
   "repository": {
