@@ -1,0 +1,16 @@
+ALTER TABLE Framework RENAME TO Framework_old;
+
+CREATE TABLE IF NOT EXISTS Framework ( 
+                id integer PRIMARY KEY autoincrement,
+                version TEXT,
+                frameworkName TEXT,
+                changelog TEXT,
+                CreatedTime TimeStamp NOT NULL DEFAULT (datetime('now','localtime'))
+              );
+
+DROP INDEX IF EXISTS framework_I;
+
+CREATE UNIQUE INDEX IF NOT EXISTS Framework_I ON Framework (version, frameworkName);
+
+INSERT INTO Framework (version, frameworkName, changelog) SELECT version, frameworkName, changelog FROM Framework_old;
+

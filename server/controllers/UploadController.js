@@ -20,20 +20,7 @@ module.exports = class UploadController {
 
     const environment = params.environment;
 
-    let neededParams = ['frameworkName'];
-
-
-    if (environment == 'DEVELOPMENT') {
-      neededParams = neededParams.concat(["featureName", 'commitHash']);
-    } else if (environment == 'PRODUCTION') {
-      neededParams = neededParams.concat(["version", 'changelog']);
-    } else {
-      result.isValid = false;
-
-      result.message = 'environment should be DEVELOPMENT/PRODUCTION';
-
-      return result;
-    }
+    let neededParams = ['frameworkName', "version", 'changelog'];
 
     let inValidParams = []
 
@@ -50,7 +37,6 @@ module.exports = class UploadController {
     result.message = inValidParams.join(" , ") + " not set"
 
 
-
     return result;
   }
 
@@ -63,9 +49,6 @@ module.exports = class UploadController {
 
     try {
       const framework = files.framework;
-
-
-
 
       if (framework === undefined) {
         result = {
@@ -103,23 +86,29 @@ module.exports = class UploadController {
 
   async upload(ctx, next) {
 
+    ctx.body = "We have received the framework.Thx ^_^!"
+
     const parametersCheckResult = this.checkParameters(ctx.request.body.fields);
 
     const fileCheckResult = this.checkFiles(ctx.request.body.files);
 
     if (parametersCheckResult.isValid && fileCheckResult.isValid) {
-      ctx.body = "OK"
 
+      
       const row = await DatabaseUtil.queryDB(ctx.request.body.fields)
-        .catch((error) => {
-          console.log(error);
-        });;
+      .catch((error) => {
+        console.log(error);
+      });;
+      
+      if (row != undefined && row.length > 0) {
+        
+        console.log("this framework has uploaded");
 
-
-      if (row) {
+        ctx.status = 200;
+        
         ctx.body = "this framework has uploaded";
 
-        next();
+        next()
 
         return;
       }
@@ -138,7 +127,7 @@ module.exports = class UploadController {
 
     } else {
       ctx.body = parametersCheckResult.message + '\n' + fileCheckResult.message;
-    }
+    }    
 
     next()
   }

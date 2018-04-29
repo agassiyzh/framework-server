@@ -1,5 +1,5 @@
 const should = require('chai').should();
-const UploadController = require('../controllers/uploadController.js');
+const UploadController = require('../server/controllers/UploadController');
 
 const uploadController = new UploadController();
 
@@ -13,23 +13,14 @@ describe('UploadController', () => {
       result.isValid.should.equal(false);
     })
 
-    it('PRODUCTION environment parameters check', async () => {
+    it('parameters check', async () => {
       const result = uploadController.checkParameters({
-        environment : "PRODUCTION"
+        environment : "PRODUCTION",
+        version: '1.0',
+        chnagelog: "test"
       });
 
       result.isValid.should.equal(false);
-    })
-
-    it('DEVELOPMENT environment parameters check', async () => {
-      const result = uploadController.checkParameters ({
-        environment : "DEVELOPMENT",
-        frameworkName : "test",
-        commitHash : "kajdlfj2olkj",
-        featureName : "test"
-      });
-
-      result.isValid.should.equal(true);
     })
 
   })

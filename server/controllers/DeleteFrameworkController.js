@@ -5,9 +5,8 @@ const fs = require('fs');
 
 
 module.exports = class DeleteFrameworkController {
-    async deleteFramework(ctx, next, env) {
+    async deleteFramework(ctx, next) {
         let parameters = ctx.params;
-        parameters.environment = env;
 
         var responseObject = {
             code: 1,

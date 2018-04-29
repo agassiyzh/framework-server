@@ -3,13 +3,11 @@ const Koa = require("koa");
 const app = new Koa();
 const koaBody = require('koa-body');
 const logger = require('koa-logger');
-const Enum = require('enum');
 const os = require('os')
 const path = require('path');
 const serverRootDir = require('./utils/FileUtils.js').serverRootDir;
 const createFolderIfNeeded = require('./utils/FileUtils.js').createFolderIfNeeded;
 const DatabaseUtils = require('./utils/DatabaseUtil');
-const typEnum = new Enum( ['PRODUCTION', 'DEVELOPMENT'] );
 const koajson = require('koa-json');
 
 let router = require('./router.js')
@@ -26,8 +24,6 @@ if (app.env == 'development') {
 
   app.use(logger());
 }
-
-DatabaseUtils.createDatabase();
 
 app.use(koaBody({ multipart: true}));
 

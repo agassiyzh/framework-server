@@ -14,24 +14,13 @@ module.exports.createFolderIfNeeded = function createFolderIfNeeded(path) {
   }
 }
 
-
-
 const serverRootDir = (process.env.NODE_ENV == 'production')? path.join("/data", 'framework-server') : path.join(os.homedir(), 'framework-server')
 
 module.exports.getFileAbsolutePathWithParameters = function getFileAbsolutePathWithParameters(parameters) {
   let filePath = ''
 
-    const environment = parameters.environment;
-    
-    if (environment == 'DEVELOPMENT') {
-      let fileName = parameters.commitHash + ".framework.zip"
-      
-      filePath = path.join(serverRootDir, "DEVELOPMENT", parameters.frameworkName, parameters.featureName, fileName)
-      
-    } else if (environment == "PRODUCTION") {
-      let fileName = parameters.frameworkName + ".framework.zip"
-      filePath = path.join(serverRootDir, "PRODUCTION", parameters.frameworkName, parameters.version, fileName);
-    }
+    let fileName = parameters.frameworkName + ".framework.zip"
+    filePath = path.join(serverRootDir, "Frameworks", parameters.frameworkName, parameters.version, fileName);
 
     return filePath;
 }

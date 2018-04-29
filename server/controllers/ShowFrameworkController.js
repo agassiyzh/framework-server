@@ -2,9 +2,9 @@ const util = require('util')
 const DatabaseUtils = require('../utils/DatabaseUtil')
 
 module.exports = {
+
     async show(ctx) {
         let params = ctx.params
-        params.environment = 'PRODUCTION'
 
         console.log(params)
 

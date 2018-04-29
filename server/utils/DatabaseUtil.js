@@ -16,7 +16,7 @@ function getDB() {
 function buildWhereFromParams(params) {
     var wherePairs = [];
     for (const key in params) {
-        wherePairs.push(key + '=' + "'" +params[key] + "'");
+        wherePairs.push(key + '=' + "'" + params[key] + "'");
     }
 
     return wherePairs.join(" AND ");
@@ -24,121 +24,43 @@ function buildWhereFromParams(params) {
 
 module.exports.buildWhereFromParams = buildWhereFromParams;
 
-module.exports.createDatabase = (callback = (err) => {}) => {
-    const db = getDB();
-    
+module.exports.queryDB =  (params) => {
 
-    try {
-        db.serialize(() => {
-            db.run(`CREATE TABLE IF NOT EXISTS Framework ( 
-                id integer PRIMARY KEY autoincrement,
-                version TEXT,
-                frameworkName TEXT,
-                featureName TEXT,
-                changelog TEXT,
-                environment TEXT,
-                commitHash TEXT 
-              );`);
-
-            db.run("CREATE UNIQUE INDEX IF NOT EXISTS framework_I ON Framework (commitHash, version, environment, frameworkName);");
-        });
-
-
-    } catch (error) {
-
-        console.log(error);
-
-    } finally {
-        callback();
-    }
-
-}
-
-module.exports.queryDB = (params) => {
-
-    return new Promise( (resolve, reject) => {
+    return new Promise((resolve, reject) => {
         const db = getDB();
 
-        if (params.environment == 'DEVELOPMENT') {
 
-            const SQL = `SELECT * FROM Framework WHERE
-                environment=? AND
-                frameworkName=? AND
-                commitHash=?;
-            `;
-    
-            db.get(SQL,
-                params.environment,
-                params.frameworkName,
-                params.commitHash,
-                (err, row) => {
-                    
-                    if (err) {
-                        reject(err);
-                    }else {
-                        resolve(row);
-                    }
-                }
-            )
-    
-        } else if (params.environment == 'PRODUCTION') {
-            let SQL = `SELECT * FROM Framework WHERE
-                environment=? AND
-                frameworkName=?
-            `;
-    
-            let values = [
-                params.environment,
-                params.frameworkName
-            ]
+        let whereStatement = buildWhereFromParams(params);
 
-            if (params.version) {
-                SQL += " AND version=? "
-                values.push(params.version)
-                // 这里可以用 all 取第一个
-                db.get(SQL, ...values, (err, row) => {
-                    if (err) {
-                        reject(err);
-                    }else {
-                        resolve(row);
-                    }
-                });
+        let SQL = "SELECT * FROM Framework WHERE " + whereStatement;
+
+        db.all(SQL, (error, rows) => {
+            if (error) {
+                reject(error);
             } else {
-                db.all(SQL, ...values, (err, row) => {
-                    if (err) {
-                        reject(err);
-                    }else {
-                        resolve(row);
-                    }
-                });
+                resolve(rows);
             }
-        } else {
-            throw (Error("envrionment should be DEVELOPMENT or PRODUCTION"));
-        }
-    
+        })
+
         db.close(() => {
-            console.log('cloase db after query');
-            
         });
     });
 
 }
 
 module.exports.deleteFramework = (params) => {
-    
+
     return new Promise((resolve, reject) => {
         const db = getDB();
 
         const whereStatement = buildWhereFromParams(params);
 
         const SQL = "DELETE FROM Framework WHERE " + whereStatement;
-        
-        console.log(SQL)
 
         db.exec(SQL, (err) => {
             if (err) {
                 reject(err);
-            }else {
+            } else {
                 resolve(true);
             }
         });
@@ -150,30 +72,26 @@ module.exports.deleteFramework = (params) => {
 
 module.exports.insertDB = (params) => {
 
-    return new Promise((resolve, reject) =>  {
+    return new Promise((resolve, reject) => {
         const db = getDB();
 
         db.run(
-            "INSERT INTO Framework (environment, version, frameworkName, featureName, changelog, commitHash) VALUES (?, ?, ?, ?, ?, ?)", [params.environment,
+            "INSERT INTO Framework (version, frameworkName, changelog) VALUES (?, ?, ?)", [
                 params.version,
                 params.frameworkName,
-                params.featureName,
-                params.changelog,
-                params.commitHash
+                params.changelog
             ],
             (error) => {
                 if (error) {
                     reject(error);
-                }else {
+                } else {
                     resolve(true);
                 }
-                
+
             }
         );
 
         db.close(() => {
-            console.log('closed db after insert');
-    
         });
     })
 

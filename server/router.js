@@ -1,43 +1,30 @@
 'use strict';
 
+const Router = require('koa-better-router')
 const UploadController = require('./controllers/UploadController');
 const GetFrameworkController = require('./controllers/GetFrameworkController');
 const DeleteFrameworkController = require('./controllers/DeleteFrameworkController');
 const ShowFrameworkController = require('./controllers/ShowFrameworkController');
-const Router = require('koa-better-router')
 const router = Router().loadMethods()
 
-router.post('/upload', (ctx, next) => {
-  let uploadController = new UploadController();
-  uploadController.upload(ctx, next);
+router.post('/upload', async (ctx, next) => {
+    let uploadController = new UploadController();
+
+    await uploadController.upload(ctx, next);
 })
 
-router.get('/getframework/PRODUCTION/:frameworkName/:version', async (ctx, next) => {
+router.get('/download/:frameworkName/:version', async (ctx, next) => {
+    let getFrameworkController =  new GetFrameworkController();
 
-  let getFrameworkController = new GetFrameworkController();  
-
-  await getFrameworkController.getFramework(ctx, next, 'PRODUCTION');
+    await getFrameworkController.getFramework(ctx, next);
 })
 
-router.get('/getframework/DEVELOPMENT/:frameworkName/:featureName/:commitHash', async (ctx, next) => {
-  let getFrameworkController = new GetFrameworkController();
+router.delete('/framework/:frameworkName/:version', async (ctx, next) => {
+    let deleteFrameworkController = new DeleteFrameworkController();
 
-  await getFrameworkController.getFramework(ctx, next, 'DEVELOPMENT')
+    await deleteFrameworkController.deleteFramework(ctx, next);
 })
 
-router.delete('/framework/PRODUCTION/:frameworkName/:version', async (ctx, next) => {
-
-  let deleteFrameworkController = new DeleteFrameworkController();  
-
-  await deleteFrameworkController.deleteFramework(ctx, next, 'PRODUCTION');
-})
-
-router.delete('/framework/DEVELOPMENT/:frameworkName/:featureName/:commitHash', async (ctx, next) => {
-
-  let deleteFrameworkController = new DeleteFrameworkController();
-
-  await deleteFrameworkController.deleteFramework(ctx, next, 'DEVELOPMENT')
-})
 
 router.get('/framework/:frameworkName', ShowFrameworkController.show)
 
